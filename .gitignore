@@ -1,0 +1,2 @@
+# Bỏ qua tệp cấu hình chứa mật khẩu CSDL
+config/db.php
