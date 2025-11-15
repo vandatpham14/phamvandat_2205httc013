@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sql = "INSERT INTO tasks (user_id, title, description, due_date, status) VALUES (:user_id, :title, :description, :due_date, 'pending')";
             $stmt = $pdo->prepare($sql);
             
-            // Sử dụng Prepared Statements
+           
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':description', $description, PDO::PARAM_STR);
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $stmt->execute();
 
-            // Chuyển hướng về trang chủ với thông báo thành công
+           
             redirect('index.php?status=added');
 
         } catch (PDOException $e) {

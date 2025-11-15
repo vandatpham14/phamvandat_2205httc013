@@ -1,5 +1,4 @@
 <?php
-// Tệp này sẽ được include bởi các tệp khác, 
 ?>
 <!DOCTYPE html>
 <html lang="vi">

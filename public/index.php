@@ -4,11 +4,11 @@ require_once '../includes/auth_check.php'; // Kiểm tra đăng nhập
 
 $user_id = $_SESSION['user_id'];
 
-// Xử lý Lọc và Sắp xếp (Không thay đổi)
+// Xử lý Lọc và Sắp xếp 
 $sort = $_GET['sort'] ?? 'due_date';
 $filter_status = $_GET['filter_status'] ?? 'all'; 
 
-// Xây dựng câu truy vấn SQL cơ bản (Không thay đổi)
+// Xây dựng câu truy vấn SQL cơ bản 
 $sql = "SELECT * FROM tasks WHERE user_id = :user_id";
 $params = [':user_id' => $user_id];
 
@@ -40,9 +40,7 @@ try {
     $tasks = [];
 }
 
-/**
- * Cập nhật hàm trợ giúp để trả về class CSS cho màu viền và màu badge
- */
+
 function getStatusClass($status) {
     switch ($status) {
         case 'pending': return ['border' => 'border-warning', 'text' => 'text-warning', 'badge' => 'bg-warning text-dark'];

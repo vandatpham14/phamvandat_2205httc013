@@ -11,10 +11,8 @@ if (!$task_id) {
     redirect('index.php');
 }
 
-// ------ XỬ LÝ NHANH 'MARK AS COMPLETE' TỪ index.php ------
 if (isset($_GET['complete']) && $_GET['complete'] == 'true') {
     try {
-        // Bảo mật: Đảm bảo người dùng chỉ cập nhật task của CHÍNH HỌ
         $sql = "UPDATE tasks SET status = 'completed' WHERE id = :task_id AND user_id = :user_id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':task_id' => $task_id, ':user_id' => $user_id]);
@@ -24,15 +22,12 @@ if (isset($_GET['complete']) && $_GET['complete'] == 'true') {
     }
 }
 
-// ------ XỬ LÝ POST (Khi người dùng gửi form chỉnh sửa) ------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Lấy dữ liệu từ form
     $title = trim($_POST['title']);
     $description = trim($_POST['description']);
     $due_date = !empty($_POST['due_date']) ? $_POST['due_date'] : null;
     $status = $_POST['status'];
 
-    // Validate
     if (empty($title)) {
         $errors[] = 'Tiêu đề là bắt buộc.';
     }
@@ -42,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         try {
-            // Bảo mật: Luôn thêm `AND user_id = :user_id` vào mệnh đề WHERE
             $sql = "UPDATE tasks SET 
                         title = :title, 
                         description = :description, 
@@ -68,22 +62,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ------ XỬ LÝ GET (Lấy thông tin task để hiển thị lên form) ------
-if (!$task) { // Chỉ lấy nếu chưa xử lý POST (để giữ lại dữ liệu POST nếu có lỗi)
+if (!$task) { 
     try {
-        // Bảo mật: Đảm bảo người dùng chỉ lấy task của CHÍNH HỌ
         $stmt = $pdo->prepare("SELECT * FROM tasks WHERE id = :task_id AND user_id = :user_id");
         $stmt->execute([':task_id' => $task_id, ':user_id' => $user_id]);
         $task = $stmt->fetch();
 
-        // Nếu không tìm thấy task (hoặc task không thuộc sở hữu của user)
         if (!$task) {
-            // Có thể hiển thị trang 404 hoặc 403, ở đây ta chuyển hướng về index
             redirect('index.php');
         }
     } catch (PDOException $e) {
         $errors[] = "Lỗi CSDL: " . $e->getMessage();
-        $task = []; // Gán rỗng để form không bị lỗi
+        $task = [];
     }
 }
 
